@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  LambdaFunctionOverHttps:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: target/lambda-demo-0.0.1-SNAPSHOT-shaded.jar
+      Handler: org.example.LambdaHandler::handleRequest
+      Runtime: java17
+      MemorySize: 512
+      Timeout: 15
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+      Events:
+        Hello:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
